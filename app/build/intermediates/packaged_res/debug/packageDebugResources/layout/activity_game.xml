@@ -5,17 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/board_background">
+    android:background="@color/tron_dark_bg">
 
-    <!-- Game Info Panel -->
+    <!-- Game Info Panel - Tron Style -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="16dp"
-        android:background="@color/white"
-        android:padding="12dp"
-        android:elevation="2dp">
+        android:background="@drawable/tron_panel_bg"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvMoves"
@@ -23,8 +22,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/moves_initial"
-            android:textSize="14sp"
-            android:textColor="@color/text_primary" />
+            style="@style/TronTextStats"
+            android:shadowColor="@color/tron_cyan_glow"
+            android:shadowRadius="8"
+            android:shadowDx="0"
+            android:shadowDy="0" />
 
         <TextView
             android:id="@+id/tvTime"
@@ -32,22 +34,24 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/time_initial"
-            android:textSize="14sp"
-            android:textColor="@color/text_primary"
-            android:gravity="end" />
+            style="@style/TronTextStats"
+            android:gravity="end"
+            android:shadowColor="@color/tron_cyan_glow"
+            android:shadowRadius="8"
+            android:shadowDx="0"
+            android:shadowDy="0" />
 
     </LinearLayout>
 
-    <!-- Game Board Container -->
+    <!-- Game Board Container - Tron Grid -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/white"
-        android:elevation="2dp"
-        android:padding="8dp">
+        android:background="@drawable/tron_grid_bg"
+        android:padding="12dp">
 
-        <com.equipo.atrapame.presentation.game.view.IsometricBoardView
+        <com.equipo.atrapame.presentation.game.IsometricBoardView
             android:id="@+id/gameBoard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -59,27 +63,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/status_background"
-            android:padding="12dp"
+            android:background="@drawable/tron_panel_bg"
+            android:padding="24dp"
             android:text="@string/loading"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
-
+            style="@style/TronTextTitle"
+            android:textSize="24sp"
+            android:shadowColor="@color/tron_cyan_glow"
+            android:shadowRadius="15"
+            android:shadowDx="0"
+            android:shadowDy="0"
             android:visibility="gone" />
 
     </FrameLayout>
 
-    <!-- Game Controls -->
-
+    <!-- Game Controls - Tron Style -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp">
 
-    <com.equipo.atrapame.presentation.game.view.VirtualJoystickView
+    <com.equipo.atrapame.presentation.game.VirtualJoystickView
         android:id="@+id/joystick"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:contentDescription="@string/joystick_content_description"
@@ -104,7 +110,10 @@
         android:layout_marginEnd="12dp"
         android:minWidth="120dp"
         android:text="@string/btn_pause"
-        android:backgroundTint="@color/button_secondary" />
+        style="@style/GameButton"
+        android:layout_margin="0dp"
+        android:strokeColor="@color/tron_orange"
+        android:textColor="@color/tron_orange" />
 
         <Button
             android:id="@+id/btnRestart"
@@ -112,7 +121,8 @@
             android:layout_height="48dp"
             android:minWidth="120dp"
             android:text="@string/btn_restart"
-            android:backgroundTint="@color/button_primary" />
+            style="@style/GameButton"
+            android:layout_margin="0dp" />
 
     </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

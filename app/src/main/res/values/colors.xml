@@ -3,26 +3,44 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
-    <!-- Game Colors -->
-    <color name="primary_blue">#2196F3</color>
-    <color name="primary_blue_dark">#1976D2</color>
-    <color name="accent_orange">#FF9800</color>
+    <!-- Tron Theme Colors -->
+    <color name="tron_dark_bg">#0A0E27</color>
+    <color name="tron_darker_bg">#050812</color>
+    <color name="tron_cyan">#00F0FF</color>
+    <color name="tron_cyan_glow">#6DFFFF</color>
+    <color name="tron_blue">#0066FF</color>
+    <color name="tron_orange">#FF6C00</color>
+    <color name="tron_orange_glow">#FF9D42</color>
+    <color name="tron_purple">#9D00FF</color>
+    <color name="tron_grid">#1A2847</color>
     
-    <!-- Game Board Colors -->
-    <color name="board_background">#F5F5F5</color>
-    <color name="cell_empty">#FFFFFF</color>
-    <color name="cell_obstacle">#424242</color>
-    <color name="cell_player">#4CAF50</color>
-    <color name="cell_enemy">#F44336</color>
-    <color name="cell_border">#E0E0E0</color>
+    <!-- Game Colors -->
+    <color name="primary_blue">#00F0FF</color>
+    <color name="primary_blue_dark">#0066FF</color>
+    <color name="accent_orange">#FF6C00</color>
+    
+    <!-- Game Board Colors - Tron Style -->
+    <color name="board_background">#0A0E27</color>
+    <color name="cell_empty">#0F1535</color>
+    <color name="cell_obstacle">#1A2847</color>
+    <color name="cell_player">#00F0FF</color>
+    <color name="cell_enemy">#FF6C00</color>
+    <color name="cell_border">#00F0FF</color>
+    <color name="grid_line">#1A2847</color>
     
     <!-- UI Colors -->
-    <color name="button_primary">#2196F3</color>
-    <color name="button_secondary">#757575</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <color name="button_primary">#00F0FF</color>
+    <color name="button_secondary">#1A2847</color>
+    <color name="text_primary">#00F0FF</color>
+    <color name="text_secondary">#6DFFFF</color>
+    <color name="text_on_dark">#FFFFFF</color>
 
-    <!-- Joystick -->
-    <color name="joystick_base">#302196F3</color>
-    <color name="joystick_handle">#FF2196F3</color>
+    <!-- Joystick - Tron Style -->
+    <color name="joystick_base">#301A2847</color>
+    <color name="joystick_handle">#FF00F0FF</color>
+    <color name="joystick_border">#6DFFFF</color>
+    
+    <!-- Status Colors -->
+    <color name="status_win">#00F0FF</color>
+    <color name="status_lose">#FF6C00</color>
 </resources>

@@ -34,10 +34,32 @@
     <!-- Score Screen -->
     <string name="score_title">Puntuaciones</string>
     <string name="no_scores">No hay puntuaciones guardadas</string>
-    <string name="score_format">%s - %d movimientos - %s</string>
+    <string name="score_format" formatted="false">%s - %d movimientos - %s</string>
     
     <!-- Common -->
     <string name="loading">Cargando...</string>
     <string name="error_connection">Error de conexión</string>
     <string name="btn_ok">OK</string>
+    
+    <!-- Victory Dialog -->
+    <string name="dialog_victory_title">¡Victoria!</string>
+    <string name="dialog_victory_message" formatted="false">¡Felicidades! Has capturado al enemigo.\n\nMovimientos: %d\nTiempo: %s</string>
+    <string name="btn_play_again">Jugar de Nuevo</string>
+    <string name="btn_main_menu">Menú Principal</string>
+    
+    <!-- Defeat Dialog -->
+    <string name="dialog_defeat_title">¡Derrota!</string>
+    <string name="dialog_defeat_message">El enemigo te ha capturado.\n\n¡No te rindas! Inténtalo de nuevo.</string>
+    <string name="btn_try_again">Intentar de Nuevo</string>
+    
+    <!-- Notifications -->
+    <string name="notification_channel_description">Notificaciones del juego Atrápame Si Puedes</string>
+    <string name="notification_victory_title">¡Victoria!</string>
+    <string name="notification_victory_text" formatted="false">¡Ganaste en %d movimientos y %s!</string>
+    <string name="notification_defeat_title">¡Derrota!</string>
+    <string name="notification_defeat_text">El enemigo te capturó. ¡Inténtalo de nuevo!</string>
+    
+    <!-- Firebase Errors -->
+    <string name="error_firebase_save">No se pudo guardar la puntuación</string>
+    <string name="error_firebase_load">No se pudieron cargar las puntuaciones</string>
 </resources>

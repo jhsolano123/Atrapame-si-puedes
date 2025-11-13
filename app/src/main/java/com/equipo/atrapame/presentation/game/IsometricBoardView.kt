@@ -1,4 +1,4 @@
-package com.equipo.atrapame.presentation.game.view
+package com.equipo.atrapame.presentation.game
 
 import android.content.Context
 import android.graphics.Canvas
@@ -41,45 +41,56 @@ class IsometricBoardView @JvmOverloads constructor(
     }
 
     private val tileDarkPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ColorUtils.blendARGB(tileLightPaint.color, Color.BLACK, 0.08f)
+        color = ContextCompat.getColor(context, R.color.tron_darker_bg)
         style = Paint.Style.FILL
     }
 
     private val gridLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.cell_border)
+        color = ContextCompat.getColor(context, R.color.tron_cyan)
         style = Paint.Style.STROKE
-        strokeWidth = dp(1f)
+        strokeWidth = dp(1.5f)
+        setShadowLayer(4f, 0f, 0f, ContextCompat.getColor(context, R.color.tron_cyan_glow))
     }
 
     private val obstacleTopPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.cell_obstacle)
+        color = ContextCompat.getColor(context, R.color.tron_grid)
         style = Paint.Style.FILL
     }
 
     private val obstacleLeftPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ColorUtils.blendARGB(obstacleTopPaint.color, Color.BLACK, 0.25f)
+        color = ColorUtils.blendARGB(
+            ContextCompat.getColor(context, R.color.tron_grid),
+            Color.BLACK,
+            0.3f
+        )
         style = Paint.Style.FILL
     }
 
     private val obstacleRightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ColorUtils.blendARGB(obstacleTopPaint.color, Color.BLACK, 0.4f)
+        color = ColorUtils.blendARGB(
+            ContextCompat.getColor(context, R.color.tron_grid),
+            Color.BLACK,
+            0.5f
+        )
         style = Paint.Style.FILL
     }
 
     private val playerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.cell_player)
+        color = ContextCompat.getColor(context, R.color.tron_cyan)
         style = Paint.Style.FILL
+        setShadowLayer(15f, 0f, 0f, ContextCompat.getColor(context, R.color.tron_cyan_glow))
     }
 
     private val enemyPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.cell_enemy)
+        color = ContextCompat.getColor(context, R.color.tron_orange)
         style = Paint.Style.FILL
+        setShadowLayer(15f, 0f, 0f, ContextCompat.getColor(context, R.color.tron_orange_glow))
     }
 
     private val entityBorderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ColorUtils.setAlphaComponent(Color.BLACK, 120)
+        color = ContextCompat.getColor(context, R.color.tron_cyan_glow)
         style = Paint.Style.STROKE
-        strokeWidth = dp(1.5f)
+        strokeWidth = dp(2f)
     }
 
     private val entityShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -88,25 +99,29 @@ class IsometricBoardView @JvmOverloads constructor(
     }
 
     private val axisPaintX = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.primary_blue)
-        strokeWidth = dp(2f)
+        color = ContextCompat.getColor(context, R.color.tron_cyan)
+        strokeWidth = dp(1.5f)
+        alpha = 100
     }
 
     private val axisPaintY = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.accent_orange)
-        strokeWidth = dp(2f)
+        color = ContextCompat.getColor(context, R.color.tron_orange)
+        strokeWidth = dp(1.5f)
+        alpha = 100
     }
 
     private val axisPaintZ = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.cell_enemy)
-        strokeWidth = dp(2f)
+        color = ContextCompat.getColor(context, R.color.tron_purple)
+        strokeWidth = dp(1.5f)
+        alpha = 100
     }
 
     private val axisTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.text_primary)
-        textSize = sp(12f)
+        color = ContextCompat.getColor(context, R.color.tron_cyan_glow)
+        textSize = sp(10f)
         style = Paint.Style.FILL
-        typeface = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD)
+        typeface = android.graphics.Typeface.MONOSPACE
+        alpha = 150
     }
 
     fun setGameState(state: GameState) {

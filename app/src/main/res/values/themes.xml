@@ -1,25 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.AtrapamelSiPuedes" parent="Theme.Material3.DayNight">
-        <item name="colorPrimary">@color/primary_blue</item>
-        <item name="colorPrimaryVariant">@color/primary_blue_dark</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/accent_orange</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="android:statusBarColor">@color/primary_blue_dark</item>
+    <!-- Tron Theme -->
+    <style name="Base.Theme.AtrapamelSiPuedes" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/tron_cyan</item>
+        <item name="colorPrimaryVariant">@color/tron_blue</item>
+        <item name="colorOnPrimary">@color/tron_dark_bg</item>
+        <item name="colorSecondary">@color/tron_orange</item>
+        <item name="colorOnSecondary">@color/tron_dark_bg</item>
+        <item name="android:statusBarColor">@color/tron_darker_bg</item>
+        <item name="android:navigationBarColor">@color/tron_darker_bg</item>
+        <item name="android:windowBackground">@color/tron_dark_bg</item>
+        <item name="android:textColorPrimary">@color/tron_cyan</item>
+        <item name="android:textColorSecondary">@color/tron_cyan_glow</item>
     </style>
 
-    <style name="Theme.AtrapamelSiPuedes" parent="Base.Theme.AtrapamelSiPuedes" />
+    <style name="Theme.AtrapamelSiPuedes" parent="Base.Theme.AtrapamelSiPuedes">
+        <item name="actionBarStyle">@style/TronActionBar</item>
+    </style>
     
-    <!-- Game Button Style -->
-    <style name="GameButton" parent="Widget.Material3.Button">
+    <!-- Tron Action Bar -->
+    <style name="TronActionBar" parent="Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/tron_darker_bg</item>
+        <item name="titleTextStyle">@style/TronActionBarTitle</item>
+    </style>
+    
+    <style name="TronActionBarTitle" parent="TextAppearance.Material3.ActionBar.Title">
+        <item name="android:textColor">@color/tron_cyan</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <!-- Tron Button Style -->
+    <style name="GameButton" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:layout_margin">8dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="backgroundTint">@color/button_primary</item>
+        <item name="android:textColor">@color/tron_cyan</item>
+        <item name="strokeColor">@color/tron_cyan</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="backgroundTint">@color/tron_darker_bg</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+    
+    <!-- Tron Button Primary (Filled) -->
+    <style name="GameButtonPrimary" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/tron_dark_bg</item>
+        <item name="backgroundTint">@color/tron_cyan</item>
+        <item name="android:letterSpacing">0.1</item>
     </style>
     
     <!-- Game Cell Style -->
@@ -28,5 +61,25 @@
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:background">@color/cell_empty</item>
+    </style>
+    
+    <!-- Tron Text Styles -->
+    <style name="TronTextTitle">
+        <item name="android:textColor">@color/tron_cyan</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.15</item>
+    </style>
+    
+    <style name="TronTextBody">
+        <item name="android:textColor">@color/tron_cyan_glow</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    
+    <style name="TronTextStats">
+        <item name="android:textColor">@color/tron_cyan</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">monospace</item>
     </style>
 </resources>

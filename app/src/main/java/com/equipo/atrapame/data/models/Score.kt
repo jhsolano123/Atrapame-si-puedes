@@ -2,12 +2,15 @@ package com.equipo.atrapame.data.models
 
 data class Score(
     val id: String = "",
-    val playerName: String,
-    val moves: Int,
-    val timeElapsed: Long,
-    val difficulty: Difficulty,
+    val playerName: String = "",
+    val moves: Int = 0,
+    val timeElapsed: Long = 0L,
+    val difficulty: Difficulty = Difficulty.MEDIUM,
     val timestamp: Long = System.currentTimeMillis()
 ) {
+    // Constructor sin argumentos requerido por Firebase
+    constructor() : this("", "", 0, 0L, Difficulty.MEDIUM, System.currentTimeMillis())
+
     fun getFormattedTime(): String {
         val seconds = timeElapsed / 1000
         val minutes = seconds / 60

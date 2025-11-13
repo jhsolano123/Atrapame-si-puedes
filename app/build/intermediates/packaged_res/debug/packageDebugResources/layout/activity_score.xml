@@ -4,16 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/board_background">
+    android:background="@color/tron_dark_bg">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/score_title"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
+        style="@style/TronTextTitle"
         android:gravity="center"
+        android:layout_marginBottom="8dp"
+        android:shadowColor="@color/tron_cyan_glow"
+        android:shadowRadius="10"
+        android:shadowDx="0"
+        android:shadowDy="0" />
+
+    <View
+        android:layout_width="150dp"
+        android:layout_height="2dp"
+        android:background="@color/tron_cyan"
+        android:layout_gravity="center"
         android:layout_marginBottom="24dp" />
 
     <FrameLayout
@@ -25,8 +34,6 @@
             android:id="@+id/rvScores"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:elevation="2dp"
             android:padding="8dp" />
 
         <TextView
@@ -35,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_scores"
-            android:textSize="16sp"
-            android:textColor="@color/text_secondary"
+            style="@style/TronTextBody"
+            android:textSize="18sp"
             android:visibility="gone" />
 
         <ProgressBar
@@ -44,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:indeterminateTint="@color/tron_cyan"
             android:visibility="gone" />
 
     </FrameLayout>

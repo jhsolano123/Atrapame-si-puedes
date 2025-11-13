@@ -1,4 +1,4 @@
-package com.equipo.atrapame.presentation.game.view
+package com.equipo.atrapame.presentation.game
 
 import android.content.Context
 import android.graphics.Canvas
@@ -22,27 +22,28 @@ class VirtualJoystickView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val basePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.joystick_base)
+        color = ContextCompat.getColor(context, R.color.tron_darker_bg)
         style = Paint.Style.FILL
     }
 
     private val baseBorderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
+        color = ContextCompat.getColor(context, R.color.tron_cyan)
         style = Paint.Style.STROKE
-        strokeWidth = resources.displayMetrics.density * 2f
-        alpha = 150
+        strokeWidth = resources.displayMetrics.density * 2.5f
+        setShadowLayer(8f, 0f, 0f, ContextCompat.getColor(context, R.color.tron_cyan_glow))
     }
 
     private val handlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.joystick_handle)
+        color = ContextCompat.getColor(context, R.color.tron_cyan)
         style = Paint.Style.FILL
+        setShadowLayer(12f, 0f, 0f, ContextCompat.getColor(context, R.color.tron_cyan_glow))
     }
 
     private val guidePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.WHITE
+        color = ContextCompat.getColor(context, R.color.tron_grid)
         style = Paint.Style.STROKE
-        strokeWidth = resources.displayMetrics.density
-        alpha = 90
+        strokeWidth = resources.displayMetrics.density * 1.5f
+        alpha = 120
     }
 
     private var centerX = 0f

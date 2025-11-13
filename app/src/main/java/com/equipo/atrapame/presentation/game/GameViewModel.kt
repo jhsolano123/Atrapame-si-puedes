@@ -7,25 +7,48 @@ import androidx.lifecycle.viewModelScope
 import com.equipo.atrapame.data.models.Direction
 import com.equipo.atrapame.data.models.GameState
 import com.equipo.atrapame.data.models.Position
+import com.equipo.atrapame.data.models.Score
+import com.equipo.atrapame.data.repository.ConfigRepository
+import com.equipo.atrapame.data.repository.GameRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class GameViewModel : ViewModel() {
+data class GameResult(val moves: Int, val timeElapsed: Long)
+
+class GameViewModel(
+    private val gameRepository: GameRepository = GameRepository(),
+    private val configRepository: ConfigRepository? = null
+) : ViewModel() {
 
     private val _gameState = MutableLiveData<GameState>()
     val gameState: LiveData<GameState> = _gameState
 
+    private val _showVictoryDialog = MutableLiveData<GameResult?>()
+    val showVictoryDialog: LiveData<GameResult?> = _showVictoryDialog
+
+    private val _showDefeatDialog = MutableLiveData<Boolean>()
+    val showDefeatDialog: LiveData<Boolean> = _showDefeatDialog
+
     private var enemyMovementJob: Job? = null
+    private var timerJob: Job? = null
+    private var gameStartTime: Long = 0L
 
     init {
         initializeGame()
     }
 
     fun initializeGame(rows: Int = GameState.DEFAULT_ROWS, cols: Int = GameState.DEFAULT_COLS) {
+        // Cancelar jobs anteriores
+        timerJob?.cancel()
+        enemyMovementJob?.cancel()
+        
         val obstacles = createDefaultObstacles(rows, cols)
         _gameState.value = GameState.createInitialState(rows, cols, obstacles)
+        gameStartTime = System.currentTimeMillis()
+        
+        startTimerLoop()
         startEnemyMovementLoop()
     }
 
@@ -38,13 +61,29 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    private fun startEnemyMovementLoop(intervalMillis: Long = DEFAULT_ENEMY_MOVE_INTERVAL_MS) {
-        enemyMovementJob?.cancel()
+    private fun startTimerLoop() {
+        timerJob = viewModelScope.launch {
+            while (isActive) {
+                val currentState = _gameState.value
+                if (currentState != null && !currentState.isGameWon && !currentState.isGameLost) {
+                    val elapsed = System.currentTimeMillis() - gameStartTime
+                    _gameState.value = currentState.copy(timeElapsed = elapsed)
+                }
+                delay(100) // Actualizar cada 100ms para suavidad
+            }
+        }
+    }
+
+    private fun startEnemyMovementLoop() {
+        // Obtener velocidad del enemigo según dificultad
+        val enemySpeed = configRepository?.getPlayerConfig()?.difficulty?.enemySpeed?.toLong()
+            ?: DEFAULT_ENEMY_MOVE_INTERVAL_MS
+        
         enemyMovementJob = viewModelScope.launch {
             while (isActive) {
                 val shouldContinue = stepEnemy()
                 if (!shouldContinue) break
-                delay(intervalMillis)
+                delay(enemySpeed)
             }
         }
     }
@@ -83,15 +122,43 @@ class GameViewModel : ViewModel() {
         return positions.toList()
     }
 
+    fun onGameWon() {
+        val state = _gameState.value ?: return
+        _showVictoryDialog.value = GameResult(state.moves, state.timeElapsed)
+    }
+
+    fun onGameLost() {
+        _showDefeatDialog.value = true
+    }
+
+    suspend fun saveCurrentScore(): Result<String> {
+        val state = _gameState.value ?: return Result.failure(Exception("No game state"))
+        if (configRepository == null) {
+            return Result.failure(Exception("ConfigRepository not available"))
+        }
+        
+        val config = configRepository.getPlayerConfig()
+        val score = Score(
+            playerName = config.name,
+            moves = state.moves,
+            timeElapsed = state.timeElapsed,
+            difficulty = config.difficulty
+        )
+        return gameRepository.saveScore(score)
+    }
+
+    fun resetDialogEvents() {
+        _showVictoryDialog.value = null
+        _showDefeatDialog.value = false
+    }
+
     override fun onCleared() {
         enemyMovementJob?.cancel()
+        timerJob?.cancel()
         super.onCleared()
     }
 
     companion object {
-        private const val DEFAULT_ENEMY_MOVE_INTERVAL_MS = 800L
+        private const val DEFAULT_ENEMY_MOVE_INTERVAL_MS = 750L
     }
-
-
-
 }

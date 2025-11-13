@@ -55,6 +55,10 @@ data class GameState(
         val targetPosition = playerPosition.move(direction)
         if (!targetPosition.isValid(rows, cols)) return this
 
+        // Validar colisión con obstáculos usando la lista de obstáculos
+        if (obstacles.contains(targetPosition)) return this
+
+        // Validar usando el board también como respaldo
         val targetCell = board[targetPosition.row][targetPosition.col]
         if (targetCell == CellType.OBSTACLE) return this
 
@@ -134,6 +138,9 @@ data class GameState(
     private fun isTraversable(position: Position): Boolean {
         if (!position.isValid(rows, cols)) return false
         if (position == playerPosition) return false
+        
+        // Verificar la lista de obstáculos primero
+        if (obstacles.contains(position)) return false
 
         return when (board[position.row][position.col]) {
             CellType.OBSTACLE -> false

@@ -1,18 +1,17 @@
 package com.equipo.atrapame.presentation.score
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.equipo.atrapame.R
-import com.equipo.atrapame.data.repository.GameRepository
 import com.equipo.atrapame.databinding.ActivityScoreBinding
-import kotlinx.coroutines.launch
 
 class ScoreActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityScoreBinding
-    private lateinit var gameRepository: GameRepository
+    private val viewModel: ScoreViewModel by viewModels()
     private lateinit var scoreAdapter: ScoreAdapter
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,10 +19,9 @@ class ScoreActivity : AppCompatActivity() {
         binding = ActivityScoreBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
-        gameRepository = GameRepository()
         setupUI()
         setupRecyclerView()
-        loadScores()
+        setupObservers()
     }
     
     private fun setupUI() {
@@ -39,28 +37,28 @@ class ScoreActivity : AppCompatActivity() {
         }
     }
     
-    private fun loadScores() {
-        binding.progressBar.visibility = android.view.View.VISIBLE
-        
-        lifecycleScope.launch {
-            gameRepository.getTopScores().fold(
-                onSuccess = { scores ->
-                    binding.progressBar.visibility = android.view.View.GONE
-                    if (scores.isEmpty()) {
-                        binding.tvNoScores.visibility = android.view.View.VISIBLE
-                        binding.rvScores.visibility = android.view.View.GONE
-                    } else {
-                        binding.tvNoScores.visibility = android.view.View.GONE
-                        binding.rvScores.visibility = android.view.View.VISIBLE
-                        scoreAdapter.submitList(scores)
-                    }
-                },
-                onFailure = { error ->
-                    binding.progressBar.visibility = android.view.View.GONE
-                    binding.tvNoScores.visibility = android.view.View.VISIBLE
-                    binding.tvNoScores.text = getString(R.string.error_connection)
-                }
-            )
+    private fun setupObservers() {
+        viewModel.scores.observe(this) { scores ->
+            if (scores.isEmpty()) {
+                binding.tvNoScores.isVisible = true
+                binding.rvScores.isVisible = false
+            } else {
+                binding.tvNoScores.isVisible = false
+                binding.rvScores.isVisible = true
+                scoreAdapter.submitList(scores)
+            }
+        }
+
+        viewModel.loading.observe(this) { isLoading ->
+            binding.progressBar.isVisible = isLoading
+        }
+
+        viewModel.error.observe(this) { errorMessage ->
+            if (errorMessage != null) {
+                binding.tvNoScores.isVisible = true
+                binding.tvNoScores.text = errorMessage
+                binding.rvScores.isVisible = false
+            }
         }
     }
     

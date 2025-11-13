@@ -1,23 +1,38 @@
 package com.equipo.atrapame.presentation.game
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.equipo.atrapame.R
 import com.equipo.atrapame.databinding.ActivityGameBinding
+import com.equipo.atrapame.presentation.NotificationHelper
+import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class GameActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityGameBinding
-    private val viewModel: GameViewModel by viewModels()
+    private val viewModel: GameViewModel by viewModels { 
+        GameViewModelFactory(this)
+    }
+    private lateinit var notificationHelper: NotificationHelper
+    private var gameEnded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        notificationHelper = NotificationHelper(this)
+        notificationHelper.createNotificationChannel()
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationHelper.requestNotificationPermission(this)
+        }
         
         setupUI()
         setupObservers()
@@ -48,7 +63,68 @@ class GameActivity : AppCompatActivity() {
                 state.isGameLost -> getString(R.string.game_lost)
                 else -> getString(R.string.loading)
             }
+
+            // Detectar victoria
+            if (state.isGameWon && !gameEnded) {
+                gameEnded = true
+                viewModel.onGameWon()
+            }
+
+            // Detectar derrota
+            if (state.isGameLost && !gameEnded) {
+                gameEnded = true
+                viewModel.onGameLost()
+            }
         }
+
+        viewModel.showVictoryDialog.observe(this) { result ->
+            result?.let {
+                showVictoryDialog(it.moves, it.timeElapsed)
+            }
+        }
+
+        viewModel.showDefeatDialog.observe(this) { shouldShow ->
+            if (shouldShow) {
+                showDefeatDialog()
+            }
+        }
+    }
+
+    private fun showVictoryDialog(moves: Int, timeElapsed: Long) {
+        val timeStr = formatElapsedTime(timeElapsed)
+        
+        // Mostrar notificación de victoria
+        notificationHelper.showVictoryNotification(moves, timeStr)
+
+        GameDialogs.showVictoryDialog(
+            context = this,
+            moves = moves,
+            time = timeStr,
+            onPlayAgain = { restartGame() },
+            onMainMenu = { finish() }
+        ).show()
+
+        // Guardar puntuación
+        lifecycleScope.launch {
+            viewModel.saveCurrentScore()
+        }
+    }
+
+    private fun showDefeatDialog() {
+        // Mostrar notificación de derrota
+        notificationHelper.showDefeatNotification()
+        
+        GameDialogs.showDefeatDialog(
+            context = this,
+            onPlayAgain = { restartGame() },
+            onMainMenu = { finish() }
+        ).show()
+    }
+
+    private fun restartGame() {
+        gameEnded = false
+        viewModel.resetDialogEvents()
+        viewModel.initializeGame()
     }
 
     private fun formatElapsedTime(elapsedMillis: Long): String {
