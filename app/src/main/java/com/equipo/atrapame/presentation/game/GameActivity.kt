@@ -21,6 +21,7 @@ class GameActivity : AppCompatActivity() {
     }
     private lateinit var notificationHelper: NotificationHelper
     private var gameEnded = false
+    private var isPaused = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,16 @@ class GameActivity : AppCompatActivity() {
             if (direction != null) {
                 viewModel.onDirectionInput(direction)
             }
+        }
+        
+        // Configurar botón de reinicio
+        binding.btnRestart.setOnClickListener {
+            restartGame()
+        }
+        
+        // Configurar botón de pausa
+        binding.btnPause.setOnClickListener {
+            togglePause()
         }
     }
 
@@ -123,8 +134,21 @@ class GameActivity : AppCompatActivity() {
 
     private fun restartGame() {
         gameEnded = false
+        isPaused = false
+        binding.btnPause.text = getString(R.string.btn_pause)
         viewModel.resetDialogEvents()
         viewModel.initializeGame()
+    }
+    
+    private fun togglePause() {
+        isPaused = !isPaused
+        if (isPaused) {
+            viewModel.pauseGame()
+            binding.btnPause.text = getString(R.string.btn_resume)
+        } else {
+            viewModel.resumeGame()
+            binding.btnPause.text = getString(R.string.btn_pause)
+        }
     }
 
     private fun formatElapsedTime(elapsedMillis: Long): String {

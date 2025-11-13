@@ -34,6 +34,9 @@ class GameViewModel(
     private var enemyMovementJob: Job? = null
     private var timerJob: Job? = null
     private var gameStartTime: Long = 0L
+    private var pauseStartTime: Long = 0L
+    private var totalPausedTime: Long = 0L
+    private var isPaused: Boolean = false
 
     init {
         initializeGame()
@@ -47,17 +50,31 @@ class GameViewModel(
         val obstacles = createDefaultObstacles(rows, cols)
         _gameState.value = GameState.createInitialState(rows, cols, obstacles)
         gameStartTime = System.currentTimeMillis()
+        totalPausedTime = 0L
+        isPaused = false
         
         startTimerLoop()
         startEnemyMovementLoop()
     }
 
     fun onDirectionInput(direction: Direction?) {
-        if (direction == null) return
+        if (direction == null || isPaused) return
         val currentState = _gameState.value ?: return
         val newState = currentState.movePlayer(direction)
         if (newState != currentState) {
             _gameState.value = newState
+        }
+    }
+    
+    fun pauseGame() {
+        isPaused = true
+        pauseStartTime = System.currentTimeMillis()
+    }
+    
+    fun resumeGame() {
+        if (isPaused) {
+            totalPausedTime += System.currentTimeMillis() - pauseStartTime
+            isPaused = false
         }
     }
 
@@ -65,8 +82,8 @@ class GameViewModel(
         timerJob = viewModelScope.launch {
             while (isActive) {
                 val currentState = _gameState.value
-                if (currentState != null && !currentState.isGameWon && !currentState.isGameLost) {
-                    val elapsed = System.currentTimeMillis() - gameStartTime
+                if (currentState != null && !currentState.isGameWon && !currentState.isGameLost && !isPaused) {
+                    val elapsed = System.currentTimeMillis() - gameStartTime - totalPausedTime
                     _gameState.value = currentState.copy(timeElapsed = elapsed)
                 }
                 delay(100) // Actualizar cada 100ms para suavidad
@@ -90,8 +107,8 @@ class GameViewModel(
 
     private fun stepEnemy(): Boolean {
         val currentState = _gameState.value ?: return true
-        if (currentState.isGameWon || currentState.isGameLost) {
-            return false
+        if (currentState.isGameWon || currentState.isGameLost || isPaused) {
+            return !isPaused // Continuar el loop si está pausado, pero no hacer nada
         }
 
         val updatedState = currentState.advanceEnemy()

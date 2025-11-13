@@ -3896,6 +3896,7 @@ string btn_pause
 string btn_play
 string btn_play_again
 string btn_restart
+string btn_resume
 string btn_save
 string btn_scores
 string btn_try_again
