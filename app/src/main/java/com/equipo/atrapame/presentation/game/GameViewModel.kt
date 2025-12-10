@@ -125,22 +125,131 @@ class GameViewModel(
     private fun createDefaultObstacles(rows: Int, cols: Int): List<Position> {
         if (rows < 3 || cols < 3) return emptyList()
 
+        val difficulty = configRepository.getPlayerConfig().difficulty
+        
+        return when (difficulty) {
+            com.equipo.atrapame.data.models.Difficulty.EASY -> createEasyMap(rows, cols)
+            com.equipo.atrapame.data.models.Difficulty.MEDIUM -> createMediumMap(rows, cols)
+            com.equipo.atrapame.data.models.Difficulty.HARD -> createHardMap(rows, cols)
+        }
+    }
+    
+    private fun createEasyMap(rows: Int, cols: Int): List<Position> {
         val positions = mutableSetOf<Position>()
-
-        for (row in 1 until rows - 1 step 2) {
-            val startCol = (row / 2) % cols
-            positions.add(Position(row, startCol))
-
-            val secondaryCol = startCol + 2
-            if (secondaryCol in 0 until cols) {
-                positions.add(Position(row, secondaryCol))
+        
+        // Muy pocos obstáculos dispersos - solo algunos en el centro
+        val centerRow = rows / 2
+        val centerCol = cols / 2
+        
+        // Agregar 2-3 obstáculos simples
+        if (rows >= 5 && cols >= 5) {
+            positions.add(Position(centerRow, centerCol))
+            if (centerRow + 1 < rows - 1) {
+                positions.add(Position(centerRow + 1, centerCol - 1))
+            }
+            if (centerCol + 1 < cols - 1) {
+                positions.add(Position(centerRow - 1, centerCol + 1))
             }
         }
-
-        positions.remove(Position(0, 0))
-        positions.remove(Position(rows - 1, cols - 1))
-
+        
+        // Asegurar que inicio y fin estén libres
+        clearStartAndEndPositions(positions, rows, cols)
+        
         return positions.toList()
+    }
+    
+    private fun createMediumMap(rows: Int, cols: Int): List<Position> {
+        val positions = mutableSetOf<Position>()
+        
+        // Patrón de laberinto moderado - paredes en forma de L
+        for (row in 2 until rows - 2 step 2) {
+            for (col in 2 until cols - 2 step 2) {
+                // Crear formas de L
+                positions.add(Position(row, col))
+                if (row + 1 < rows - 1) {
+                    positions.add(Position(row + 1, col))
+                }
+                if (col + 1 < cols - 1) {
+                    positions.add(Position(row, col + 1))
+                }
+            }
+        }
+        
+        // Agregar algunas paredes verticales
+        for (row in 1 until rows - 1 step 3) {
+            val col = (rows - row) % (cols - 2) + 1
+            if (col < cols - 1) {
+                positions.add(Position(row, col))
+            }
+        }
+        
+        clearStartAndEndPositions(positions, rows, cols)
+        
+        return positions.toList()
+    }
+    
+    private fun createHardMap(rows: Int, cols: Int): List<Position> {
+        val positions = mutableSetOf<Position>()
+        
+        // Laberinto muy denso con múltiples patrones
+        for (row in 1 until rows - 1) {
+            for (col in 1 until cols - 1) {
+                // Patrón de cuadrícula muy densa
+                if ((row + col) % 2 == 0 || (row % 3 == 1 && col % 3 == 1)) {
+                    positions.add(Position(row, col))
+                }
+            }
+        }
+        
+        // Agregar más obstáculos en patrón de cruz
+        val centerRow = rows / 2
+        val centerCol = cols / 2
+        for (i in 1 until rows - 1) {
+            if (i != centerRow) {
+                positions.add(Position(i, centerCol))
+            }
+        }
+        for (j in 1 until cols - 1) {
+            if (j != centerCol) {
+                positions.add(Position(centerRow, j))
+            }
+        }
+        
+        // Crear corredores mínimos para que sea jugable
+        // Corredor diagonal principal
+        for (i in 0 until minOf(rows, cols)) {
+            positions.remove(Position(i, i))
+        }
+        
+        // Corredor alternativo
+        for (i in 0 until rows) {
+            if (i < cols) {
+                positions.remove(Position(i, 0))
+            }
+        }
+        for (j in 0 until cols) {
+            if (j < rows) {
+                positions.remove(Position(rows - 1, j))
+            }
+        }
+        
+        clearStartAndEndPositions(positions, rows, cols)
+        
+        return positions.toList()
+    }
+    
+    private fun clearStartAndEndPositions(positions: MutableSet<Position>, rows: Int, cols: Int) {
+        // Limpiar área alrededor del inicio (0,0)
+        positions.remove(Position(0, 0))
+        positions.remove(Position(0, 1))
+        positions.remove(Position(1, 0))
+        positions.remove(Position(1, 1))
+        
+        // Limpiar área alrededor del final (rows-1, cols-1)
+        positions.remove(Position(rows - 1, cols - 1))
+        positions.remove(Position(rows - 2, cols - 1))
+        positions.remove(Position(rows - 1, cols - 2))
+        positions.remove(Position(rows - 2, cols - 2))
     }
 
     fun onGameWon() {

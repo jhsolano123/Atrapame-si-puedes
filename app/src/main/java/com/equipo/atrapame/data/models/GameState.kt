@@ -55,19 +55,20 @@ data class GameState(
         val targetPosition = playerPosition.move(direction)
         if (!targetPosition.isValid(rows, cols)) return this
 
-        // Validar colisión con obstáculos usando la lista de obstáculos
-        if (obstacles.contains(targetPosition)) return this
-
-        // Validar usando el board también como respaldo
-        val targetCell = board[targetPosition.row][targetPosition.col]
-        if (targetCell == CellType.OBSTACLE) return this
+        // Validar colisión con obstáculos usando el board array (más confiable)
+        if (board[targetPosition.row][targetPosition.col] == CellType.OBSTACLE) return this
 
         val newBoard = Array(rows) { row -> board[row].clone() }
         newBoard[playerPosition.row][playerPosition.col] = CellType.EMPTY
 
-        val hasCapturedEnemy = targetPosition == enemyPosition || targetCell == CellType.ENEMY
+        val hasCapturedEnemy = targetPosition == enemyPosition
 
-        newBoard[targetPosition.row][targetPosition.col] = CellType.PLAYER
+        if (hasCapturedEnemy) {
+            newBoard[targetPosition.row][targetPosition.col] = CellType.PLAYER
+        } else {
+            newBoard[targetPosition.row][targetPosition.col] = CellType.PLAYER
+            newBoard[enemyPosition.row][enemyPosition.col] = CellType.ENEMY
+        }
 
         return copy(
             board = newBoard,
@@ -139,13 +140,8 @@ data class GameState(
         if (!position.isValid(rows, cols)) return false
         if (position == playerPosition) return false
         
-        // Verificar la lista de obstáculos primero
-        if (obstacles.contains(position)) return false
-
-        return when (board[position.row][position.col]) {
-            CellType.OBSTACLE -> false
-            else -> true
-        }
+        // Verificar usando el board array para consistencia
+        return board[position.row][position.col] != CellType.OBSTACLE
     }
 
     private fun aStar(start: Position, goal: Position): List<Position>? {
@@ -172,7 +168,7 @@ data class GameState(
         openSet.add(Node(start, gScore.getValue(start), heuristic(start, goal)))
 
         while (openSet.isNotEmpty()) {
-            val currentNode = openSet.poll()
+            val currentNode = openSet.poll() ?: break
             val current = currentNode.position
 
             if (current == goal) {

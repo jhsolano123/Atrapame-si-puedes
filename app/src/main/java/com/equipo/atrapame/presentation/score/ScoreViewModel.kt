@@ -31,7 +31,7 @@ class ScoreViewModel(
             _error.value = null
 
             try {
-                val scoreList = repository.getTopScores()
+                val scoreList = repository.getTopScores().take(limit)
                 _scores.value = scoreList
             } catch (e: Exception) {
                 _error.value = e.message ?: "Error desconocido"

@@ -1,16 +1,16 @@
 {
     "logs": [
         {
-            "outputFile": "com.equipo.atrapame.app-mergeDebugResources-42:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
+            "outputFile": "com.equipo.atrapame.app-mergeDebugResources-45:/values-h320dp-port-v13/values-h320dp-port-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\diego\\.gradle\\caches\\8.13\\transforms\\c154fc49ecbba2b8fb08a0147f9caa34\\transformed\\material-1.10.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
+                    "source": "C:\\Users\\diego\\.gradle\\caches\\8.13\\transforms\\356646a86c77c2950de9e3dbd4b5ad05\\transformed\\material-1.11.0\\res\\values-h320dp-port-v13\\values-h320dp-port-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
                         "startOffsets": "55",
-                        "endColumns": "75",
-                        "endOffsets": "126"
+                        "endColumns": "63",
+                        "endOffsets": "114"
                     }
                 }
             ]

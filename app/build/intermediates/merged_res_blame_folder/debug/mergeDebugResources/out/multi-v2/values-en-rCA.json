@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.equipo.atrapame.app-mergeDebugResources-42:/values-en-rCA/values-en-rCA.xml",
+            "outputFile": "com.equipo.atrapame.app-mergeDebugResources-45:/values-en-rCA/values-en-rCA.xml",
             "map": [
                 {
                     "source": "C:\\Users\\diego\\.gradle\\caches\\8.13\\transforms\\053f41f6719a5135425af9ed60ec1649\\transformed\\appcompat-1.6.1\\res\\values-en-rCA\\values-en-rCA.xml",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\diego\\.gradle\\caches\\8.13\\transforms\\7b81a078229d45123eba0a9f2eeccbf4\\transformed\\core-1.12.0\\res\\values-en-rCA\\values-en-rCA.xml",
+                    "source": "C:\\Users\\diego\\.gradle\\caches\\8.13\\transforms\\39926232391beec9d552479c67785b7b\\transformed\\core-1.13.0\\res\\values-en-rCA\\values-en-rCA.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
